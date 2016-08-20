@@ -1,0 +1,8 @@
+{
+  "db" : {
+  	"user": "root",
+  	"passwd": "",
+  	"host": "10.0.2.2",
+  	"database": "drupallocal_healthcentral"
+  }
+}
