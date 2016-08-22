@@ -1,8 +1,12 @@
 {
-  "db" : {
-  	"user": "root",
-  	"passwd": "",
-  	"host": "10.0.2.2",
-  	"database": "drupallocal_healthcentral"
-  }
+	"db" : {
+		"user": "root",
+		"passwd": "",
+		"host": "10.0.2.2",
+		"database": "drupallocal_healthcentral"
+	},
+	"logger": {
+		"api": "logs/api.log",
+		"exception": "logs/exceptions.log"
+	}
 }

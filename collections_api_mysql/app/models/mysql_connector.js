@@ -8,6 +8,7 @@ var pool = mysql.createPool(global.config.db);
 
 exports.connection = {
     query: function () {
+        console.log('1)MYSQL query');
         var queryArgs = Array.prototype.slice.call(arguments),
             events = [],
             eventNameIndex = {};
@@ -19,12 +20,15 @@ exports.connection = {
                 }
             }
             if (conn) {
+                console.log('2)MYSQL CONN');
                 var q = conn.query.apply(conn, queryArgs);
                 q.on('end', function () {
+                    console.log('3)MYSQL END');
                     conn.release();
                 });
 
                 events.forEach(function (args) {
+                    console.log('3)MYSQL EVENT');
                     q.on.apply(q, args);
                 });
             }
