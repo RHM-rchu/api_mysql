@@ -18,15 +18,15 @@ var should = require('should'),
 //  app.use(bodyParser.json());
 exports.hexToRgb = function(hex) {
 
-  var red   = parseInt(hex.substring(0, 2), 16);
+  var red = parseInt(hex.substring(0, 2), 16);
   var green = parseInt(hex.substring(2, 4), 16);
-  var blue  = parseInt(hex.substring(4, 6), 16);
+  var blue = parseInt(hex.substring(4, 6), 16);
 
   return [red, green, blue];
 
 };
 
-// exports.check = function( done, f ) {
+// exports.check_catch = function( done, f ) {
 //   try {
 //     f();
 //     done();
@@ -37,21 +37,27 @@ exports.hexToRgb = function(hex) {
 
 // };
 
-module.exports.check = function check( done, f ) {
-  try {
-    f();
-    done();
-  } catch( e ) {
-    done( e );
-    // done(new Error('Acutal: ['+ e.actual + '] Expected [' + e.operator + ']'));
-  }
+
+function check_catch(done, f) {
+  setTimeout(function() {
+      try {
+        f();
+        done();
+      } catch (e) {
+        done(e);
+        // done(new Error('Acutal: ['+ e.actual + '] Expected [' + e.operator + ']'));
+      }
+    }
+    , 1000);
 }
-// module.exports.nextPrime = nextPrime;
-
+var http = require("http");
+var url = require("url");
+function get_path_name_last( the_url, callback ) {
+  var pathname = url.parse('http://localhost/collections/1988/?test=bac&test1=123').pathname;
+  return callback( pathname.split('/').filter(function (s) { return !!s }).pop() );
+}
 //=======================================
 //=======================================
-
-
 
 
 
@@ -144,15 +150,17 @@ describe('Routing', function() {
           done();
         });
     });
-    it('should correctly return JSON for living-with-crohns', function(done) {
+
+    var ths_uri = '/api/collections/living-with-crohns';
+    it('should correctly return JSON for ' + get_path_name_last(ths_uri, function(slug){return slug}), function(done) {
       this.slow(25);
-      this.timeout(500);
+      this.timeout(1500);
       var body = {
         //    firstName: 'ron',
         //    lastName: 'chu'
       };
       request(url)
-        .get('/api/collections/living-with-crohns')
+        .get(ths_uri)
         .send(body)
         .expect('Content-Type', /json/)
         .expect(200) //Status code
@@ -165,30 +173,32 @@ describe('Routing', function() {
           //----> https://shouldjs.github.io/#assertion-containdeep
           // https://mochajs.org/
           // Should.js fluent syntax applied
-          res.body[0].should.have.property('hcn_page_id').which.is.a.Number(); //.be.a.String();
-          'foobar'.should.match(/^foo/);
-          //      res.body[0].hcn_page_id.should.equal(1898);
-          res.body[0].hcn_page_id.should.match(/^[0-9]{4}/);
-          res.body[0].hcn_page_type.should.match(/^(st|lbln|default)$/);
-          res.body[0].hcn_sponsor_ad_category1.should.not.equal(null);
-          //      res.body[0].hcn_sponsor_display_title.must.startWith('Living');
-          res.body[0].hcn_sponsor_display_title.should.match(/^living/i);
-          done();
+          check_catch(done, function() {
+            res.body[0].should.have.property('hcn_page_id').which.is.a.Number(); //.be.a.String();
+            'foobar'.should.match(/^foo/);
+            //      res.body[0].hcn_page_id.should.equal(1898);
+            res.body[0].hcn_page_id.should.match(/^[0-9]{4}/);
+            res.body[0].hcn_page_type.should.match(/^(st|lblna|default)$/);
+            res.body[0].hcn_sponsor_ad_category1.should.not.equal(null);
+            //      res.body[0].hcn_sponsor_display_title.must.startWith('Living');
+            res.body[0].hcn_sponsor_display_title.should.match(/^living/i);
+          // done();
+          });
         });
     });
 
 
-    it('====> GET collection: ' + ths_uri, function(done) {
+    it('Force ERROR catch test: ' + ths_uri, function(done) {
       this.slow(10);
       // this.timeout(500);
       request(url)
         .get(ths_uri)
         .end(function(err, res) {
 
-          check( done, function() {
+          check_catch(done, function() {
             // res.body[0].hcn_page_type.should.match(/^(st|xlbln|default)$/);
-            res.body[0].hcn_sponsor_display_title.must.startWith('lliving');
-          } );
+            res.body[0].hcn_sponsor_display_title.must.startWith('living');
+          });
 
           // try {
           //     res.body[0].hcn_page_type.should.match(/^(st|xlbln|default)$/);
