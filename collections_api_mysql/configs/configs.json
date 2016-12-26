@@ -2,7 +2,7 @@
 	"db" : {
 		"user": "root",
 		"passwd": "",
-		"host": "10.0.2.2",
+		"host": "127.0.0.1",
 		"database": "drupallocal_healthcentral"
 	},
 	"logger": {
