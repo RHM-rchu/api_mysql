@@ -8,13 +8,14 @@ module.exports = (function() {
 	, mysql_queries       = require('../app/models/mysql_queries')
 	// ROUTES FOR OUR API
 	// get an instance of the express Router
-	, router = express.Router();
+	, router = express.Router()
+    , filename =  __filename.replace(appRoot, '.')
 
 
 	// middleware to use for all requests
 	router.use(function(req, res, next) {
 	    // do logging
-	    console.log((new Date).toUTCString() + '===>API Call made:' + req.method);
+	    console.log(filename , "::", (new Date).toUTCString() + '===>API Call made:' + req.method);
 	    next(); // make sure we go to the next routes and don't stop here
 	});
 
@@ -31,8 +32,8 @@ module.exports = (function() {
 	    // get all the collections (accessed at GET http://localhost:port/api/collections)
 	    .get(function(req, res) {
 			 mysql_queries.getCollectionBy_(req.params.collections_id, function(collections_datas) {
-		        console.log("GET ID: " + req.params.collections_id);
-		        console.log("Count: " + collections_datas.length);
+		        console.log(filename , "::GET ID: " + req.params.collections_id);
+		        console.log(filename , "::Count: " + collections_datas.length);
 		        res.json(collections_datas);
 			}, res);
 	    })
@@ -40,10 +41,10 @@ module.exports = (function() {
 			mysql_connection.query('SELECT * from thcn_node LIMIT 2', function(err, rows, fields) {
 				mysql_connection.end();
 				if (!err) {
-					console.log('Insert Something: ', rows.length);
+					console.log(filename , '::Insert Something: ', rows.length);
 	            	res.json("Insert Something");
 				} else {
-					console.log('Error while performing Query.');
+					console.log(filename , '::Error while performing Query.');
 				}
 			});
 	    });
@@ -53,13 +54,13 @@ module.exports = (function() {
 	router.route('/collections/:collections_id')
 		.get(function(req, res) {
 			 mysql_queries.getCollectionBy_(req.params.collections_id, function(collections_datas) {
-		        console.log("GET ID: " + req.params.collections_id);
-		        console.log("Count: " + collections_datas.length);
+		        console.log(filename , "::GET ID: " + req.params.collections_id);
+		        console.log(filename , "::Count: " + collections_datas.length);
 		        res.json(collections_datas);
 			}, res);
 	    })
 	    .post(function(req, res) {
-	        console.log("Insert ID: " + req.params.collections_id);
+	        console.log(filename , "::Insert ID: " + req.params.collections_id);
 	        res.json("Insert Something");
 	    })
 	    .put(function(req, res) {
@@ -70,6 +71,28 @@ module.exports = (function() {
 	    	res.status(401);
 	        res.json("DELETES NOT ALLOWED");
 	    });
+
+	router.route('/collections/:collections_id/articles')
+		.get(function(req, res) {
+			 mysql_queries.getCollectionBy_articles(req.params.collections_id, function(collections_datas) {
+		        console.log(filename , "::GET ID: " + req.params.collections_id);
+		        console.log(filename , "::Count: " + collections_datas.length);
+		        res.json(collections_datas);
+			}, res);
+	    })
+	    .post(function(req, res) {
+	        console.log(filename , "::Insert ID: " + req.params.collections_id);
+	        res.json("Insert Something");
+	    })
+	    .put(function(req, res) {
+	    	res.status(401);
+	        res.json("UPDATES NOT ALLOWED");
+	    })
+	    .delete(function(req, res) {
+	    	res.status(401);
+	        res.json("DELETES NOT ALLOWED");
+	    })
+	    ;
 	return router;
 
 })();

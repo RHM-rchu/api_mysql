@@ -5,7 +5,9 @@ var express     = require("express")
   , server_port = process.env.PORT || 3000;
 
 global.config = config;
+global.appRoot = __dirname;
 
+var filename =  __filename.replace(appRoot, '.')
 
 // configure app to use bodyParser()
 // this will let us get the data from a POST
@@ -21,4 +23,4 @@ app.use('/api', require('./routes/collections'));
 // START THE SERVER
 // =============================================================================
 app.listen(server_port);
-console.log('Running on port ' + server_port);
+console.log(filename , '::Running on port ' + server_port);
