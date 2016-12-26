@@ -1,10 +1,10 @@
 var express     = require("express")
   , app         = express()
   , bodyParser  = require('body-parser')
-  , config  = require('./configs/configs.json')		//Load configs for this app
+  , DotEnv = require('dotenv-node')
   , server_port = process.env.PORT || 3000;
+new DotEnv();
 
-global.config = config;
 global.appRoot = __dirname;
 
 var filename =  __filename.replace(appRoot, '.')

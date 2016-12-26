@@ -3,7 +3,14 @@
  * Connect to MYSQL pool connection
  */
 var mysql      = require('mysql')
-  , pool = mysql.createPool(global.config.db)
+  , pool = mysql.createPool({
+        "connectionLimit" : process.env.DB_CONNECTIONLIMIT,
+        "host"     : process.env.DB_HOST,
+        "user"     : process.env.DB_USER,
+        "password" : process.env.DB_PASSWD,
+        "database" : process.env.DB_DATABASE,
+        // "debug"    : process.env.DB_DEBUG
+    })
   , filename =  __filename.replace(appRoot, '.');
 
 exports.connection = {
