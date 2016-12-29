@@ -15,7 +15,9 @@ var mysql      = require('mysql')
 
 exports.connection = {
     query: function () {
-        console.log(filename , '::1)MYSQL query');
+
+        console.time("mysql_connector")
+        console.log(filename , ' 1) MYSQL BEGIN');
         var queryArgs = Array.prototype.slice.call(arguments),
             events = [],
             eventNameIndex = {};
@@ -27,15 +29,16 @@ exports.connection = {
                 }
             }
             if (conn) {
-                console.log(filename , '::2)MYSQL CONN');
+                console.log(filename , ' 2) MYSQL CONN');
                 var q = conn.query.apply(conn, queryArgs);
                 q.on('end', function () {
-                    console.log(filename , '::3)MYSQL END');
+                    console.log(filename , ' 3) MYSQL END');
+                    console.timeEnd("mysql_connector")
                     conn.release();
                 });
 
                 events.forEach(function (args) {
-                    console.log(filename , '::3)MYSQL EVENT');
+                    console.log(filename , ' 3) MYSQL EVENT');
                     q.on.apply(q, args);
                 });
             }
