@@ -4,7 +4,6 @@
 
 module.exports = (function() {
 	var express    = require('express')        // call express
-	// , mysql_connection       = require('../app/models/mysql_connector_export')
 	, mysql_queries       = require('../app/models/mysql_queries')
 	// ROUTES FOR OUR API
 	// get an instance of the express Router
