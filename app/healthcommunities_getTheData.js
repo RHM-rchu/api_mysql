@@ -3,7 +3,7 @@
 
 
 module.exports = new function() {
-	var mysql_queries       = require('../app/models/mysql_queries_healthcommunities')
+	var mysql_queries       = require('./models/mysql_queries_healthcommunities')
     , filename            =  __filename.replace(appRoot, '.');
 
 
