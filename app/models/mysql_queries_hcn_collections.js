@@ -8,30 +8,54 @@ module.exports = new function() {
     var filename =  __filename.replace(appRoot, '.')
 
 
+    this.getCollectionTypes = function( collections_datas ) {
+
+        var sql = `
+SELECT hp.hcn_type AS type from thcn_hcn_pages hp GROUP BY hp.hcn_type;
+`;
+        mysql_connection.connection.query(sql, function(err, rows, fields) {
+
+            if (!err) {
+                collections_datas(rows);
+            } else {
+                console.log('Error while performing Query.');
+                console.log(err);
+                res.status(500);
+                collections_datas('Query Error');
+            }
+
+        });
+    }
 	// this.getCollectionByID = function(data, collection_name, blocks, onlysponsored, callbackSuccess, callbackErr) {
     this.getCollectionBy_ = function(collection_id, collections_datas, res) {
 
         var sql_where;
-        if(collection_id.match(/^\d+$/)){
+        if(typeof collection_id != "undefined" && collection_id.match(/^\d+$/)){
         // if (typeof collection_id == "number" && !isNaN(collection_id)) {
             sql_where = `hp.id = ${collection_id}`;
         } else if (typeof collection_id === 'string' || collection_id instanceof String) {
-            if( collection_id == 'lbln') {
-                sql_where = `hp.hcn_type = 'lbln'`;
-            } else if( collection_id == 'st') {
-                sql_where = `hp.hcn_type = 'st'`;
-            } else if( collection_id == 'ct') {
-                sql_where = `hp.hcn_type = 'ct'`;
-            } else if( collection_id == 'mm') {
-                sql_where = `hp.hcn_type = 'mm'`;
-            }  else if( collection_id == 'default') {
-                sql_where = `hp.hcn_type = 'default'`;
-            } else {
-                sql_where = `ualias.alias LIKE '%${collection_id}%'`;
+            switch (collection_id)
+            {
+                case 'lbln':
+                    sql_where = `hp.hcn_type = 'lbln'`;
+                    break;
+                case 'st':
+                    sql_where = `hp.hcn_type = 'st'`;
+                    break;
+                case 'ct':
+                    sql_where = `hp.hcn_type = 'ct'`;
+                    break;
+                case 'mm':
+                    sql_where = `hp.hcn_type = 'mm'`;
+                    break;
+                case 'default':
+                    sql_where = `hp.hcn_type = 'default'`;
+                    break;
+                default:
+                    sql_where = `ualias.alias LIKE '%${collection_id}%'`;
+                    break;
             }
-        } else {
-            res.status(400);
-            collections_datas('Bad Request');
+
         }
         console.log(filename , "::sql_where: " + sql_where)
         var sql = `
@@ -102,20 +126,12 @@ FROM
     thcn_taxonomy_term_data t_phase ON t_phase.tid = hc.phase_id
         LEFT JOIN
     thcn_taxonomy_term_data t_topic ON t_topic.tid = hc.topic_id
-    WHERE
-  ${sql_where}
+  ${ typeof sql_where != "undefined" && " WHERE " + sql_where || "" }
 `;
 
         mysql_connection.connection.query(sql, function(err, rows, fields) {
 
-            // mysql_connection.end();
-            // purgeCache('./mysql_connector');
 
-            // for (var i = 0; i < rows.length; i++) {
-            //     console.log('NID: ', rows[i].nid);
-            //     console.log('Type: ', rows[i].type);
-            //     console.log('Title: ', rows[i].title);
-            // }
             if (!err) {
                 collections_datas(rows);
             } else {
