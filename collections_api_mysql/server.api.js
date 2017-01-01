@@ -3,7 +3,10 @@ var express     = require("express")
   , bodyParser  = require('body-parser')
   , DotEnv = require('dotenv-node')
   , fs = require('fs')
-  , server_port = process.env.PORT || 3000;
+  , server_port = process.env.PORT || 3000
+  , THEAPP = process.env.THEAPP || "hcn_collections"
+;
+
 new DotEnv();
 
 global.appRoot = __dirname;
@@ -31,18 +34,22 @@ app.use(bodyParser.json());
 //         app.use('/api', require('./routes/collections'));
 //     }
 // });
+
+
+
 try {
-    stats = fs.lstatSync(appRoot + '/routes/' + process.env.THEAPP + '.js');
+	stats = fs.lstatSync(appRoot + '/routes/' + THEAPP + '.js');
+
     // if (stats.isDirectory()) {
-    if (stats.isFile()) {
-        app.use('/api', require('./routes/' + process.env.THEAPP));
+    if ( stats.isFile() ) {
+        app.use('/api', require('./routes/' + THEAPP));
     } else {
-    	app.use('/api', require('./routes/collections'));
+    	app.use('/api', require('./routes/hcn_collections'));
     }
 }
 catch (e) {
 	console.log(e)
-    console.log("Couldn't open %s", './routes/' + process.env.THEAPP)
+    console.log("Couldn't open %s", './routes/' + THEAPP)
 }
 
 
@@ -50,7 +57,7 @@ catch (e) {
 // switch (process.env.THEAPP)
 // {
 //    case "healthcommunities":
-//        app.use('/api', require('./routes/' + process.env.THEAPP));
+//        app.use('/api', require('./routes/' + THEAPP));
 //        break;
 //    case "collections":
 //    default:

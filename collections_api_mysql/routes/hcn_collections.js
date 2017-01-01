@@ -2,9 +2,11 @@
  * Routes for Collecctions API
  */
 
+
+const getTheData = require('../app/hcn_collections_getTheData')
+
 module.exports = (function() {
 	var express    = require('express')        // call express
-	, mysql_queries       = require('../app/models/mysql_queries')
 	// ROUTES FOR OUR API
 	// get an instance of the express Router
 	, router = express.Router()
@@ -30,31 +32,23 @@ module.exports = (function() {
 	router.route('/collections')
 	    // get all the collections (accessed at GET http://localhost:port/api/collections)
 	    .get(function(req, res) {
-			 mysql_queries.getCollectionBy_(req.params.collections_id, function(collections_datas) {
-		        console.log(filename , "::GET ID: " + req.params.collections_id);
-		        console.log(filename , "::Count: " + collections_datas.length);
+			 getTheData.getCollectionBy(req.params.collections_id, function(collections_datas) {
 		        res.json(collections_datas);
 			}, res);
-	    })
-	    .post(function(req, res) {
-			mysql_connection.query('SELECT * from thcn_node LIMIT 2', function(err, rows, fields) {
-				mysql_connection.end();
-				if (!err) {
-					console.log(filename , '::Insert Something: ', rows.length);
-	            	res.json("Insert Something");
-				} else {
-					console.log(filename , '::Error while performing Query.');
-				}
-			});
 	    });
 
 
 
-	router.route('/collections/:collections_id')
+	router.route('/collections/types')
 		.get(function(req, res) {
-			 mysql_queries.getCollectionBy_(req.params.collections_id, function(collections_datas) {
-		        console.log(filename , "::GET ID: " + req.params.collections_id);
-		        console.log(filename , "::Count: " + collections_datas.length);
+			 getTheData.getCollectionTypes( function(collections_datas) {
+		        res.json(collections_datas);
+			}, res);
+	    });
+
+	router.route('/collections/:collections_id([a-z]{1,4})')
+		.get(function(req, res) {
+			 getTheData.getCollectionBy(req.params.collections_id, function(collections_datas) {
 		        res.json(collections_datas);
 			}, res);
 	    })
@@ -71,11 +65,28 @@ module.exports = (function() {
 	        res.json("DELETES NOT ALLOWED");
 	    });
 
-	router.route('/collections/:collections_id/articles')
+	router.route('/collections/:collections_id([0-9]{1,4})')
 		.get(function(req, res) {
-			 mysql_queries.getCollectionBy_articles(req.params.collections_id, function(collections_datas) {
-		        console.log(filename , "::GET ID: " + req.params.collections_id);
-		        console.log(filename , "::Count: " + collections_datas.length);
+			 getTheData.getCollectionBy(req.params.collections_id, function(collections_datas) {
+		        res.json(collections_datas);
+			}, res);
+	    })
+	    .post(function(req, res) {
+	        console.log(filename , "::Insert ID: " + req.params.collections_id);
+	        res.json("Insert Something");
+	    })
+	    .put(function(req, res) {
+	    	res.status(401);
+	        res.json("UPDATES NOT ALLOWED");
+	    })
+	    .delete(function(req, res) {
+	    	res.status(401);
+	        res.json("DELETES NOT ALLOWED");
+	    });
+
+	router.route('/collections/:collections_id([0-9]{1,4})/articles')
+		.get(function(req, res) {
+			 getTheData.getCollectionBy_articles(req.params.collections_id, function(collections_datas) {
 		        res.json(collections_datas);
 			}, res);
 	    })
