@@ -87,6 +87,13 @@ module.exports = (function() {
 	router.route('/collections/:collection_id')
 		.get(function(req, res) {
 			var collection_id = req.params.collection_id;
+			getTheData.getCollectionBy(collection_id, function(collections_datas) {
+		        res.json(collections_datas);
+			}, res);
+	    });
+	router.route('/collections/:collection_id/articles')
+		.get(function(req, res) {
+			var collection_id = req.params.collection_id;
 			getTheData.getCollection_articles(collection_id, function(collections_datas) {
 		        res.json(collections_datas);
 			}, res);
