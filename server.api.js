@@ -42,9 +42,9 @@ try {
 
     // if (stats.isDirectory()) {
     if ( stats.isFile() ) {
-        app.use('/api', require('./routes/' + THEAPP));
+        app.use('/api', require('./routes/api/' + THEAPP));
     } else {
-    	app.use('/api', require('./routes/hcn_collections'));
+    	app.use('/api', require('./routes/api/hcn_collections'));
     }
 }
 catch (e) {
