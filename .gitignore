@@ -40,9 +40,4 @@ Thumbs.db
 
 # CUSTOM #
 ######################
-contentfull_*
-*/node_modules/*
-*/.idea/*
-contentfull_test/
-contentfull_testx/
-test/
+node_modules/*
