@@ -48,7 +48,9 @@ module.exports = new function() {
 		mysql_queries.getAllCollections(collection_id, function(datas) {
 	        console.log(filename , "::GET COLLECTTION ID: " + collection_id);
 	        console.log(filename , "::Count: " + datas.length);
-	        coll_datas( datas );
+	        console.log(filename , "::Count: " + typeof datas );
+
+	        coll_datas( datas.length > 0 ? datas : { warning: global.MSG.no_results } );
 		});
     }
 
@@ -127,8 +129,13 @@ module.exports = new function() {
 								});
 						});
 					} else {
+						collections_datas[0].tabs = { warning: global.MSG.no_results };
+						collections_datas[0].promos = { warning: global.MSG.no_results };
+						coll_datas( collections_datas )
 					}
 				});
+			} else {
+				coll_datas( { warning: global.MSG.no_results } )
 			}
 		});
     }

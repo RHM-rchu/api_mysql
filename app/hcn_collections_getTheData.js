@@ -14,7 +14,17 @@ module.exports = new function() {
     this.getCollectionTypes = function( collections_datas, res ) {
 		 mysql_queries.getCollectionTypes( function(datas) {
 		    console.log(filename + ":getCollectionBy(): HAS " + datas.length);
-	        collections_datas( datas )
+	        collections_datas( datas.length > 0 ? datas : { warning: global.MSG.no_results } )
+		}, res);
+    }
+	/**
+	 * return Collections typs
+	 * @returns {Object} - Subcat(s)
+	 */
+    this.getAllCollections = function( collections_datas, res ) {
+		 mysql_queries.getAllCollections( function(datas) {
+		    console.log(filename + ":getAllCollections(): HAS " + datas.length);
+	        collections_datas( datas.length > 0 ? datas : { warning: global.MSG.no_results } )
 		}, res);
     }
 
@@ -26,7 +36,7 @@ module.exports = new function() {
     this.getCollectionBy = function( collections_id, collections_datas, res ) {
 		 mysql_queries.getCollectionBy_(collections_id, function(datas) {
 		    console.log(filename + ":getCollectionBy(): HAS " + datas.length);
-	        collections_datas( datas )
+	        collections_datas( datas.length > 0 ? datas : { warning: global.MSG.no_results } )
 		}, res);
     }
 
@@ -41,8 +51,12 @@ module.exports = new function() {
 			mysql_queries.getCollectionBy_articles(collections_id, function(datas2) {
 		        console.log(filename , "::GET Articles FOR  ID: " + collections_id);
 		        console.log(filename , "::Count: " + datas2.length);
-		        datas[0].articles = datas2;
-		        collections_datas( datas );
+		        if( datas.length > 0 ) {
+			        datas[0].articles = datas2.length > 0 ? datas2 : { warning: global.MSG.no_results };
+			        collections_datas( datas.length > 0 ? datas : { warning: global.MSG.no_results } );
+		        } else {
+		        	collections_datas( { warning: global.MSG.no_results } )
+		        }
 			}, res);
 		}, res);
     }

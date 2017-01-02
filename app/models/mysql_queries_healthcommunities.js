@@ -17,7 +17,7 @@ module.exports = new function() {
                 sql_where = ` AND cc.cat_ID = ${subcat_id}`;
             }
         }
-        console.log(filename , "::sql_where: " + sql_where)
+        console.log(filename , "::sql_where: " + sql_where);
         var sql = `
 SELECT
     cs.content_specialties_id as specialties_id,
@@ -46,7 +46,7 @@ ORDER BY cc.category_parent , cc.cat_name;
             console.log('Error while performing Query.');
             console.log(err);
             res.status(500);
-            subcat_datas('Query Error');
+            subcat_datas( { error: global.MSG.err_500 } );
         }
 
         });
@@ -109,7 +109,7 @@ GROUP BY post_id
                 console.log('Error while performing Query.');
 				console.log(err);
 		    	res.status(500);
-				subcat_articles('Query Error');
+				subcat_articles( { error: global.MSG.err_500 } );
 			}
 
 		});
@@ -149,7 +149,7 @@ WHERE
             console.log('Error while performing Query.');
             console.log(err);
             res.status(500);
-            subcat_datas('Query Error');
+            subcat_datas( { error: global.MSG.err_500 } );
         }
 
         });
@@ -157,7 +157,7 @@ WHERE
     this.getCollection_articles = function(collection_id, subcat_articles, res) {
         if(collection_id < 1 ){
             res.status(400);
-            subcat_articles('Bad Request');
+            subcat_articles( { warning: global.MSG.err_400 } );
         }
         console.log(filename , "::collection_id: " + collection_id)
         var sql = `
@@ -179,7 +179,7 @@ ORDER BY content_livingguide_tabs.tab_order;
                 console.log('Error while performing Query.');
                 console.log(err);
                 res.status(500);
-                subcat_articles('Query Error');
+                subcat_articles( { error: global.MSG.err_500 } );
             }
 
         });
@@ -210,7 +210,7 @@ ORDER BY article_order ASC;
                 console.log('Error while performing Query.');
                 console.log(err);
                 res.status(500);
-                subcat_articles('Query Error');
+                subcat_articles( { error: global.MSG.err_500 } );
             }
 
         });

@@ -1,0 +1,6 @@
+{
+  "no_results": "No Results",
+  "no_data":    "No Data",
+  "err_400":    "Bad Request",
+  "err_500":    "Query Error"
+}

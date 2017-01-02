@@ -4,14 +4,12 @@ var express     = require("express")
   , DotEnv = require('dotenv-node')
   , fs = require('fs')
   , server_port = process.env.PORT || 3000
-  , THEAPP = process.env.THEAPP || "hcn_collections"
 ;
-
 new DotEnv();
-
+var THEAPP = ( typeof process.env.THEAPP === "string" ) ? process.env.THEAPP : "hcn_collections"
 global.appRoot = __dirname;
-
-var filename =  __filename.replace(appRoot, '.')
+var filename =  __filename.replace(appRoot, '.');
+global.MSG    = require('./config/lang.system.json');
 
 
 // configure app to use bodyParser()
@@ -20,50 +18,19 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 
-// REGISTER OUR ROUTES -------------------------------
-// all of our routes will be prefixed with /api
-// fs.stat(appRoot + '/routes/' + process.env.THEAPP + '.js', function(err, stat) {
-//     if(err == null) {
-//         console.log('File exists');
-//         app.use('/api', require('./routes/' + process.env.THEAPP));
-//     } else if(err.code == 'ENOENT') {
-//         // file does not exist
-//         console.log("Couldn't open %s", './routes/' + process.env.THEAPP)
-//     } else {
-//         console.log('Some other error: ', err.code);
-//         app.use('/api', require('./routes/collections'));
-//     }
-// });
-
-
-
 try {
-	stats = fs.lstatSync(appRoot + '/routes/api/' + THEAPP + '.js');
-
-    // if (stats.isDirectory()) {
-    if ( stats.isFile() ) {
-        app.use('/api', require('./routes/api/' + THEAPP));
-    } else {
-    	app.use('/api', require('./routes/api/hcn_collections'));
-    }
+  stats = fs.lstatSync(appRoot + '/routes/api/' + THEAPP + '.js');
+  if ( stats.isFile() ) {
+      app.use('/api', require('./routes/api/' + THEAPP));
+  } else {
+  	app.use('/api', require('./routes/api/hcn_collections'));
+  }
 }
 catch (e) {
 	console.log(e)
-    console.log("Couldn't open %s", './routes/' + THEAPP)
+    console.log("Couldn't open %s", './routes/api/' + THEAPP + '.js')
 }
 
-
-
-// switch (process.env.THEAPP)
-// {
-//    case "healthcommunities":
-//        app.use('/api', require('./routes/' + THEAPP));
-//        break;
-//    case "collections":
-//    default:
-//        app.use('/api', require('./routes/collections'));
-//        break;
-// }
 
 
 // START THE SERVER

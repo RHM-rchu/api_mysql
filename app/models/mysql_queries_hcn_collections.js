@@ -21,7 +21,7 @@ SELECT hp.hcn_type AS type from thcn_hcn_pages hp GROUP BY hp.hcn_type;
                 console.log('Error while performing Query.');
                 console.log(err);
                 res.status(500);
-                collections_datas('Query Error');
+                collections_datas( { error: global.MSG.err_500 } );
             }
 
         });
@@ -137,7 +137,7 @@ FROM
             } else {
                 console.log('Error while performing Query.');
                 res.status(500);
-                collections_datas('Query Error');
+                collections_datas( { error: global.MSG.err_500 } );
                 // res.json("Query Error");
                 // console.log(sql);
                 // throw new Error(sql);
@@ -164,7 +164,7 @@ FROM
 			sql_where = `ualias.alias LIKE '%${collection_id}%'`;
 		} else {
 	    	res.status(400);
-			collections_datas('Bad Request');
+			collections_datas( { warning: global.MSG.err_400 } );
 		}
 		console.log(filename , "::sql_where: " + sql_where)
 		var sql = `
@@ -271,7 +271,7 @@ WHERE
                 console.log('Error while performing Query.');
 				console.log(err);
 		    	res.status(500);
-				collections_datas('Query Error');
+				collections_datas( { error: global.MSG.err_500 } );
 			}
 
 		});
