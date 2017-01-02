@@ -3,7 +3,7 @@
  */
 
 
-const getTheData = require('../app/hcn_collections_getTheData')
+const getTheData = require('../../app/hcn_collections_getTheData')
 
 module.exports = (function() {
 	var express    = require('express')        // call express

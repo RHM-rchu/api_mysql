@@ -5,7 +5,7 @@
 
 
 
-const getTheData = require('../app/healthcommunities_getTheData')
+const getTheData = require('../../app/healthcommunities_getTheData')
 
 module.exports = (function() {
 	var express           = require('express')        // call express

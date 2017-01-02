@@ -38,7 +38,7 @@ app.use(bodyParser.json());
 
 
 try {
-	stats = fs.lstatSync(appRoot + '/routes/' + THEAPP + '.js');
+	stats = fs.lstatSync(appRoot + '/routes/api/' + THEAPP + '.js');
 
     // if (stats.isDirectory()) {
     if ( stats.isFile() ) {
