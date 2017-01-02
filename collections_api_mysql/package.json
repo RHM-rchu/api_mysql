@@ -1,0 +1,32 @@
+{
+  "name": "application-name",
+  "version": "0.0.1",
+  "private": true,
+  "description": "API Test with MySQL",
+  "main": "server.api.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RHM-rchu/node_test"
+  },
+  "author": "Ron Chu",
+  "license": "TBD",
+  "bugs": {
+    "url": "https://github.com/RHM-rchu/node_test/issues"
+  },
+  "homepage": "https://github.com/RHM-rchu/node_test#readme",
+  "dependencies": {
+    "body-parser": "~1.0.1",
+    "dotenv-node": "0.0.2",
+    "express": "~4.0.0",
+    "mysql": "^2.5.4"
+  },
+  "scripts": {
+    "test": "make test"
+  },
+  "devDependencies": {
+    "mocha": "^3.0.2",
+    "mocha-clean": "^1.0.0",
+    "should": "^11.1.0",
+    "supertest": "^2.0.0"
+  }
+}
